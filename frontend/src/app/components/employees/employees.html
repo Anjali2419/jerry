@@ -1,0 +1,105 @@
+<header class="page-header">
+  <h1>Employee Management</h1>
+  <button type="button" (click)="logout()">Logout</button>
+</header>
+
+<main class="container">
+  <section class="form-card">
+    <h2>{{ editingId === null ? 'Add Employee' : 'Edit Employee' }}</h2>
+
+    <form #employeeForm="ngForm" (ngSubmit)="saveEmployee()">
+      <label for="employeeName">Employee Name</label>
+      <input
+        id="employeeName"
+        name="employeeName"
+        [(ngModel)]="form.employeeName"
+        required
+      />
+
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="form.email"
+        required
+      />
+
+      <label for="department">Department</label>
+      <input
+        id="department"
+        name="department"
+        [(ngModel)]="form.department"
+        required
+      />
+
+      <label for="salary">Salary</label>
+      <input
+        id="salary"
+        name="salary"
+        type="number"
+        min="0"
+        [(ngModel)]="form.salary"
+        required
+      />
+
+      <button type="submit" [disabled]="employeeForm.invalid">
+        {{ editingId === null ? 'Save Employee' : 'Update Employee' }}
+      </button>
+
+      <button
+        type="button"
+        (click)="form = emptyEmployee(); editingId = null"
+      >
+        Clear
+      </button>
+    </form>
+
+    <p class="error" role="alert">{{ errorMessage }}</p>
+  </section>
+
+  <section>
+    <h2>Employee Records</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (employee of employees; track employee.id) {
+            <tr>
+              <td>{{ employee.id }}</td>
+              <td>{{ employee.employeeName }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.salary }}</td>
+              <td>
+                <button type="button" (click)="editEmployee(employee)">
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  (click)="deleteEmployee(employee.id)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">No employee records found.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
